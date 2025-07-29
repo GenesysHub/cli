@@ -1,0 +1,37 @@
+{
+  "name": "@genesyshub/cli",
+  "version": "0.1.1",
+  "description": "Simple CLI for project initialization",
+  "bin": {
+    "genesys": "./bin/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "bun run build && bun dist/cli.js",
+    "prepublishOnly": "bun run build",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "fs-extra": "^11.1.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^20.5.1",
+    "typescript": "^5.1.6"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "packageManager": "bun@1.2.12"
+}
