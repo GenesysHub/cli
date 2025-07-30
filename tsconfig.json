@@ -16,11 +16,6 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": ".",
-    /* "paths": {
-      "@/*": ["./*"],
-      "@genesyshub/core/*": ["node_modules/@genesyshub/core/dist/*"],
-      "@genesyshub/tools/*": ["node_modules/@genesyshub/tools/dist/*"],
-    }, */
     "plugins": [
       {
         "name": "next"
@@ -30,5 +25,3 @@
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "next.config.ts"],
   "exclude": ["node_modules", "packages"]
 }
-
-//npm publish --access=restricted --registry=https://npm.pkg.github.com

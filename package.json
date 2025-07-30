@@ -1,6 +1,6 @@
 {
   "name": "@genesyshub/cli",
-  "version": "0.1.6",
+  "version": "0.1.11",
   "description": "Simple CLI for project initialization",
   "bin": {
     "@genesyshub/cli": "./bin/cli.js"
@@ -30,8 +30,11 @@
     "bun": ">=1.0.0"
   },
   "publishConfig": {
-    "access": "public",
-    "registry": "https://npm.pkg.github.com"
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GenesysHub/cli.git"
   },
   "packageManager": "bun@1.2.12"
 }
