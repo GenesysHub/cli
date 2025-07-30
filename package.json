@@ -1,17 +1,14 @@
 {
   "name": "@genesyshub/cli",
-  "version": "0.1.12",
+  "version": "0.1.15",
   "description": "Simple CLI for project initialization",
   "bin": {
     "@genesyshub/cli": "./bin/cli.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "type": "module",
-  "files": [
-    "bin",
-    "dist"
-  ],
+  "type": "commonjs",
+  "files": ["bin", "dist"],
   "scripts": {
     "build": "tsc",
     "dev": "bun run build && bun dist/cli.js",
@@ -27,7 +24,8 @@
     "typescript": "^5.1.6"
   },
   "engines": {
-    "bun": ">=1.0.0"
+    "bun": ">=1.0.0",
+    "node": ">=14.0.0"
   },
   "publishConfig": {
     "access": "public"
@@ -35,6 +33,5 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GenesysHub/cli.git"
-  },
-  "packageManager": "bun@1.2.12"
+  }
 }
