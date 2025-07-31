@@ -30,6 +30,21 @@ async function promptToContinue(stepName: string) {
   });
 }
 
+function askQuestion(question: string): Promise<string> {
+    const readline = require('readline');
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+    
+    return new Promise<string>(resolve => {
+        rl.question(question, (answer: string) => {
+            rl.close();
+            resolve(answer);
+        });
+    });
+}
+
 export async function init(rawArgs: string[]) {
   // Parse project name
   let projectName = DEFAULT_PROJECT_NAME;
@@ -83,22 +98,46 @@ export async function init(rawArgs: string[]) {
       console.log('\nCopied files:');
       execSync(`find ${targetDir} -maxdepth 2`, { stdio: 'inherit' });
     }
-
     // STEP 5: Initialize git
     console.log('\n[5/7] Initializing git repository...');
     await promptToContinue('Initialize git');
     execSync('git init', { cwd: targetDir, stdio: 'inherit' });
 
     console.log('@GenesysHub packages are currently private. You need .npmrc to install deps.');
-    // STEP 6: Install dependencies
-    /* console.log('\n[6/7] Installing dependencies with bun...');
-    await promptToContinue('Install dependencies');
-    execSync('bun install', { cwd: targetDir, stdio: 'inherit' });
 
-    // STEP 7: Run dev server
-    console.log('\n[7/7] Starting server with bun...');
-    await promptToContinue('Run server');
-    execSync('bun run start', { cwd: targetDir, stdio: 'inherit' }); */
+    // STEP 6: Ask to install dependencies
+    const shouldInstall = await askQuestion('\n[6/7] Do you want to install dependencies with bun? (y/n) ');
+    if (shouldInstall.toLowerCase() === 'y') {
+      console.log('Installing dependencies...');
+      execSync('bun install', { cwd: targetDir, stdio: 'inherit' });
+
+      // STEP 7: Ask how to run the project
+      const runOption = await askQuestion('\n[7/7] How do you want to run the project?\n' +
+        '1. Run production build (bun run build -> bun run start)\n' +
+        '2. Run development server (bun run dev)\n' +
+        '3. Do nothing\n' +
+        'Enter your choice (1-3): ');
+
+      switch (runOption) {
+        case '1':
+          console.log('Building production version...');
+          execSync('bun run build', { cwd: targetDir, stdio: 'inherit' });
+          console.log('Starting production server...');
+          execSync('bun run start', { cwd: targetDir, stdio: 'inherit' });
+          break;
+        case '2':
+          console.log('Starting development server...');
+          execSync('bun run dev', { cwd: targetDir, stdio: 'inherit' });
+          break;
+        default:
+          console.log('Skipping running the project.');
+      }
+    } else {
+      console.log('Skipping dependency installation.');
+    }
+
+    console.log(`\n✅ Success! Project created in: ${targetDir}`);
+    console.log('\nYou can now run the project manually when ready.');
 
     console.log(`\n✅ Success! Project created in: ${targetDir}`);
     console.log('\nProject is now running! You can access it in your browser.');
@@ -118,6 +157,6 @@ export async function init(rawArgs: string[]) {
   } finally {
     try {
       if (fs.existsSync(tempDir)) fs.removeSync(tempDir);
-    } catch (e) {}
+    } catch (e) { }
   }
 }
