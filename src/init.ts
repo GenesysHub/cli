@@ -6,17 +6,16 @@ import readline from 'readline';
 
 // Configuration - ADJUST THESE TO MATCH YOUR REPO
 const DEBUG_MODE = false;
-const TEMPLATE_REPO = 'https://github.com/GenesysHub/templates.git';
+const TEMPLATE_REPO = 'https://github.com/GenesysHub/project_template.git';
 const DEFAULT_PROJECT_NAME = 'test-project';
 const DEFAULT_TARGET_DIR = path.join(os.homedir(), 'Documents', 'TEST');
-const TEMPLATE_SOURCE_DIR = 'project'; // Changed from 'templates/project' to 'project'
 
 async function promptToContinue(stepName: string) {
   if (!DEBUG_MODE) return;
 
   const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
   });
 
   return new Promise<void>((resolve) => {
@@ -45,7 +44,6 @@ export async function init(rawArgs: string[]) {
   const tempDir = path.join(os.tmpdir(), `genesys-template-${Date.now()}`);
 
   console.log(`\n=== Initializing project: ${projectName} ===`);
-  console.log(`Template source: ${TEMPLATE_SOURCE_DIR}`);
 
   try {
     // STEP 1: Clone repository
@@ -61,14 +59,7 @@ export async function init(rawArgs: string[]) {
 
     // STEP 2: Verify template exists
     console.log('\n[2/7] Verifying template structure...');
-    const templateDir = path.join(tempDir, TEMPLATE_SOURCE_DIR);
-    if (!fs.existsSync(templateDir)) {
-      console.error('\nERROR: Template directory not found at:');
-      console.error(templateDir);
-      console.error('\nActual contents:');
-      execSync(`ls -la ${tempDir}`, { stdio: 'inherit' });
-      throw new Error(`Template directory '${TEMPLATE_SOURCE_DIR}' not found in root`);
-    }
+    const templateDir = path.join(tempDir);
     await promptToContinue('Verify template');
 
     // STEP 3: Prepare target directory
@@ -98,7 +89,7 @@ export async function init(rawArgs: string[]) {
     await promptToContinue('Initialize git');
     execSync('git init', { cwd: targetDir, stdio: 'inherit' });
 
-    console.log('@GenesysHub packages are currently private. You need .npmrc to install deps.')
+    console.log('@GenesysHub packages are currently private. You need .npmrc to install deps.');
     // STEP 6: Install dependencies
     /* console.log('\n[6/7] Installing dependencies with bun...');
     await promptToContinue('Install dependencies');
@@ -111,12 +102,11 @@ export async function init(rawArgs: string[]) {
 
     console.log(`\n✅ Success! Project created in: ${targetDir}`);
     console.log('\nProject is now running! You can access it in your browser.');
-
   } catch (error) {
     console.error('\n❌ Initialization failed:');
     //@ts-ignore
     console.error(error.message || error);
-    
+
     // Clean up
     try {
       if (fs.existsSync(targetDir)) fs.removeSync(targetDir);
