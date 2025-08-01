@@ -153,3 +153,4 @@ notes/
 
 .npmrc
 next-env.d.ts
+tsconfig.tsbuildinfo

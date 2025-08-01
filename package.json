@@ -1,6 +1,6 @@
 {
   "name": "@genesyshub/cli",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "description": "Simple CLI for project initialization",
   "bin": {
     "@genesyshub/cli": "./bin/cli.js"
@@ -8,9 +8,13 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "commonjs",
-  "files": ["bin", "dist"],
+  "files": [
+    "bin",
+    "dist"
+  ],
   "scripts": {
-    "build": "tsc",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc",
     "dev": "bun run build && bun dist/cli.js",
     "prepublishOnly": "bun run build",
     "test": "bun test"

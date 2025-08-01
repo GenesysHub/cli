@@ -10,7 +10,9 @@
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "declaration": true,
-    "types": ["node"]
+    "types": ["node"],
+    "incremental": false,
+    "tsBuildInfoFile": null
   },
   "include": ["src"],
   "exclude": ["node_modules", "test"]
